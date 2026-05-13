@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merhan Hossam | UI/UX Designer & Flutter Developer</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --border: #e5e7eb;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --cafe-gold: #c5a47e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+
+    /* --- PORTFOLIO UI --- */
+    .container { width: min(1120px, 92%); margin: auto; }
+    .navbar { position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(14px); background: rgba(245, 247, 251, 0.85); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 1px; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: var(--muted); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+    .nav-links a:hover { color: var(--primary); }
+
+    .hero { padding: 80px 0 40px; text-align: center; }
+    .hero-text { background: white; border: 1px solid var(--border); border-radius: 32px; padding: 60px 40px; box-shadow: var(--shadow); max-width: 950px; margin: auto; }
+    .eyebrow { display: inline-block; font-size: 0.8rem; font-weight: 800; color: var(--primary); background: rgba(79, 70, 229, 0.08); padding: 6px 16px; border-radius: 50px; margin-bottom: 24px; text-transform: uppercase; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.1; margin-bottom: 24px; color: #0f172a; }
+    h1 span { color: var(--primary); }
+
+    .about-content { max-width: 750px; margin: 0 auto 40px; color: var(--muted); font-size: 1.1rem; text-align: center; }
+    .about-content p { margin-bottom: 15px; }
+
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 40px; }
+    .skill-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 16px; text-align: center; font-weight: 700; color: #475569; font-size: 0.85rem; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 32px; border-radius: 16px; font-weight: 700; transition: 0.3s; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
+    .btn-primary { background: #0f172a; color: white; }
+    .btn-secondary { background: white; color: #0f172a; border-color: var(--border); }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+    .section-title { font-size: 2rem; margin-bottom: 40px; text-align: center; font-weight: 800; letter-spacing: -1px; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; padding-bottom: 80px; }
+    .project-card { background: white; border: 1px solid var(--border); border-radius: 28px; overflow: hidden; transition: 0.4s; cursor: pointer; }
+    .project-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: var(--shadow); }
+    .project-card img { width: 100%; height: 260px; object-fit: cover; }
+
+    /* --- CONTACT SECTION --- */
+    .contact-footer { background: #0f172a; color: white; padding: 80px 0; border-radius: 40px 40px 0 0; }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
+    .contact-link { color: white; text-decoration: none; display: flex; align-items: center; gap: 12px; margin-top: 15px; transition: 0.3s; opacity: 0.8; }
+    .contact-link:hover { opacity: 1; transform: translateX(5px); }
+
+    /* --- OVERLAY STYLES --- */
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; display: none; overflow-y: auto; background: #07070a; color: white; }
+    .close-btn { position: fixed; top: 25px; right: 25px; background: white; color: black; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 6000; font-weight: bold; }
+    
+    /* Cafe UI */
+    .cafe-hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.6), #07070a), url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .filter-bar { padding: 30px 0; text-align: center; position: sticky; top: 0; background: #07070a; z-index: 50; }
+    .filter-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 25px; border-radius: 50px; cursor: pointer; margin: 5px; transition: 0.3s; }
+    .filter-btn.active { background: white; color: black; }
+    .item-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 20px 10% 80px; }
+
+    /* Corp UI */
+    .corp-ui { background: #f8fafc; color: #1e293b; min-height: 100vh; padding: 80px 0; }
+    .corp-option { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .status { font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 50px; background: #dcfce7; color: #166534; }
+
+    #toast { position: fixed; bottom: 30px; right: 30px; background: var(--cafe-gold); color: black; padding: 15px 25px; border-radius: 12px; font-weight: 700; transform: translateY(150%); transition: 0.5s; z-index: 7000; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <div class="logo">Merhan Hossam</div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="about">
+    <div class="container">
+      <div class="hero-text">
+        <span class="eyebrow">Digital Craftsman & Flutter Expert</span>
+        <h1>Building high-end <span>mobile prototypes</span> & fluid experiences.</h1>
+        
+        <div class="about-content">
+            <p>I am a UI/UX Designer and Flutter Developer based in Egypt, dedicated to bridging the gap between sophisticated design and functional code. With a background in educational technology and a passion for computer science, I specialize in creating intuitive interfaces that solve real-world problems.</p>
+            <p>Whether I'm architecting a complex e-commerce flow or designing an immersive brand identity, my focus is always on pixel-perfect precision and user-centric logic. I thrive on turning static Figma designs into high-performance, interactive mobile applications.</p>
+        </div>
+
+        <h3 id="skills" style="margin-bottom: 20px; color: #0f172a;">Technical Expertise</h3>
+        <div class="skills-grid">
+            <div class="skill-box"><i class="fab fa-google"></i> Flutter / Dart</div>
+            <div class="skill-box"><i class="fas fa-pen-nib"></i> UI/UX Design</div>
+            <div class="skill-box"><i class="fas fa-layer-group"></i> Figma & Adobe XD</div>
+            <div class="skill-box"><i class="fas fa-code"></i> HTML5 / CSS3 / JS</div>
+            <div class="skill-box"><i class="fas fa-database"></i> Firebase</div>
+            <div class="skill-box"><i class="fas fa-project-diagram"></i> System Architecture</div>
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <a class="btn btn-primary" href="#projects">Browse Portfolio</a>
+          <a class="btn btn-secondary" href="https://github.com/Merhan17" target="_blank"><i class="fab fa-github"></i> Visit GitHub</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2 class="section-title" id="projects">Selected Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card" onclick="openOverlay('cafe-overlay')">
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800">
+        <div style="padding:25px;">
+          <span style="font-size:0.7rem; font-weight:800; color:var(--primary); text-transform:uppercase;">Mobile Web App</span>
+          <h3>Cafe Elegance & Bakery</h3>
+          <p style="color:var(--muted); font-size:0.9rem;">Advanced ordering system with category filtering and reservations.</p>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="openOverlay('qr-overlay'); init3D();">
+        <div style="height:260px; background:#000; display:flex; align-items:center; justify-content:center; color:#00ff88; font-family:monospace;">[ 3D QR ENGINE ]</div>
+        <div style="padding:25px;">
+          <span style="font-size:0.7rem; font-weight:800; color:var(--primary); text-transform:uppercase;">WebGL / Integration</span>
+          <h3>3D Dynamic Portal</h3>
+          <p style="color:var(--muted); font-size:0.9rem;">Immersive WebGL environment with dynamic QR logic.</p>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="openOverlay('corp-overlay')">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800">
+        <div style="padding:25px;">
+          <span style="font-size:0.7rem; font-weight:800; color:var(--primary); text-transform:uppercase;">Corporate UI</span>
+          <h3>Corporate Identity Hub</h3>
+          <p style="color:var(--muted); font-size:0.9rem;">Full-scale infrastructure management and business services portal.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="contact-footer" id="contact">
+    <div class="container contact-grid">
+        <div>
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Let's work together.</h2>
+            <p style="opacity: 0.6;">I'm currently available for freelance projects and full-time opportunities.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <a href="mailto:merhanhossam@gmail.com" class="contact-link">
+                <i class="fas fa-envelope"></i> merhanhossam@gmail.com
+            </a>
+            <a href="tel:+201013173668" class="contact-link">
+                <i class="fas fa-phone"></i> +20 1013173668
+            </a>
+            <a href="https://github.com/Merhan17" class="contact-link" target="_blank">
+                <i class="fab fa-github"></i> github.com/Merhan17
+            </a>
+            <div class="contact-link">
+                <i class="fas fa-map-marker-alt"></i> Alexandria, Egypt
+            </div>
+        </div>
+    </div>
+    <div class="container" style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; opacity: 0.4; font-size: 0.8rem; text-align: center;">
+        &copy; 2026 Merhan Hossam. Designed & Developed with Passion.
+    </div>
+  </footer>
+
+  <div id="cafe-overlay" class="overlay">
+    <div class="close-btn" onclick="closeOverlay('cafe-overlay')">✕</div>
+    <div class="cafe-hero">
+        <h1 style="font-family:'Playfair Display'; color:white; font-style:italic; font-size:4rem;">The Artisan Table</h1>
+        <p style="color:var(--cafe-gold); letter-spacing:5px;">COFFEE • BAKERY • COMFORT</p>
+    </div>
+    <div class="filter-bar">
+        <button class="filter-btn active" id="f-c" onclick="setCafe('coffee')">COFFEE MENU</button>
+        <button class="filter-btn" id="f-b" onclick="setCafe('bakery')">BAKERY & PASTRY</button>
+        <button class="filter-btn" id="f-r" onclick="setCafe('res')">RESERVATIONS</button>
+    </div>
+    <div id="cafe-display" class="item-grid"></div>
+  </div>
+
+  <div id="corp-overlay" class="overlay">
+    <div class="close-btn" style="background:#1e293b; color:white;" onclick="closeOverlay('corp-overlay')">✕</div>
+    <div class="corp-ui">
+        <div class="container" style="max-width: 800px;">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200" style="width:100%; border-radius:24px; margin-bottom:40px;">
+            <h2 style="margin-bottom:30px;">Infrastructure & Business Modules</h2>
+            <div class="corp-option"><div><strong>General Construction</strong><br><small>Civil & Structural</small></div><span class="status">OPERATIONAL</span></div>
+            <div class="corp-option"><div><strong>Architectural Visualization</strong><br><small>3D Renderings</small></div><span class="status">OPERATIONAL</span></div>
+            <div class="corp-option"><div><strong>Procurement Logistics</strong><br><small>Supply Chain</small></div><span class="status">OPERATIONAL</span></div>
+            <div class="corp-option"><div><strong>Industrial Fabrication</strong><br><small>Steelwork</small></div><span class="status" style="background:#fef3c7; color:#92400e;">MAINTENANCE</span></div>
+            <button class="btn btn-primary" style="width:100%; margin-top:20px; padding:20px;" onclick="showToast('Inquiry Submitted')">REQUEST PROJECT CONSULTATION</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="qr-overlay" class="overlay">
+    <div class="close-btn" onclick="closeOverlay('qr-overlay')">✕</div>
+    <canvas id="three-canvas" style="position:absolute; width:100%; height:100%;"></canvas>
+    <div style="position:relative; z-index:10; display:flex; align-items:center; justify-content:center; height:100vh;">
+        <div style="background:rgba(0,0,0,0.8); padding:40px; border-radius:30px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+            <button class="btn btn-secondary" onclick="genQR()">GENERATE PORTAL CODE</button>
+            <div id="qrWrap" style="background:white; padding:15px; border-radius:15px; margin-top:20px; display:none;">
+                <canvas id="qrCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div id="toast">Order Updated!</div>
+
+  <script>
+    function openOverlay(id) { document.getElementById(id).style.display = 'block'; document.body.style.overflow = 'hidden'; }
+    function closeOverlay(id) { document.getElementById(id).style.display = 'none'; document.body.style.overflow = 'auto'; }
+    function showToast(msg) {
+        const t = document.getElementById('toast'); t.innerText = msg;
+        t.style.transform = 'translateY(0)';
+        setTimeout(() => t.style.transform = 'translateY(150%)', 2000);
+    }
+
+    const cafeData = {
+        coffee: [
+            {n:"Velvet Spanish Latte", p:"85 EGP", i:"https://images.unsplash.com/photo-1541167760496-162955ed8a9f?w=400"},
+            {n:"Ethiopian V60", p:"95 EGP", i:"https://images.unsplash.com/photo-1510707577719-af7c183f14df?w=400"},
+            {n:"Salted Caramel Cold Brew", p:"90 EGP", i:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400"},
+            {n:"Flat White", p:"75 EGP", i:"https://images.unsplash.com/photo-1551030173-122adbb0286a?w=400"}
+        ],
+        bakery: [
+            {n:"Almond Croissant", p:"65 EGP", i:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400"},
+            {n:"Wild Berry Danish", p:"70 EGP", i:"https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=400"},
+            {n:"Pistachio Muffin", p:"60 EGP", i:"https://images.unsplash.com/photo-1559622314-f83c84666d33?w=400"},
+            {n:"Artisan Sourdough", p:"120 EGP", i:"https://images.unsplash.com/photo-1585478259715-876acc5be8eb?w=400"}
+        ]
+    };
+
+    function setCafe(tab) {
+        const d = document.getElementById('cafe-display');
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('f-' + tab[0]).classList.add('active');
+        d.innerHTML = '';
+        if(tab === 'res') {
+            d.innerHTML = `<div style="grid-column:1/-1; background:rgba(255,255,255,0.05); padding:50px; border-radius:30px; text-align:center;">
+                <h2 style="margin-bottom:20px;">Book a Table</h2>
+                <input type="text" placeholder="Number of Guests" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; padding:15px; border-radius:12px; margin:10px; width:260px;">
+                <button class="btn btn-secondary" style="margin-top:20px;" onclick="showToast('Reservation Confirmed!')">CONFIRM BOOKING</button></div>`;
+        } else {
+            cafeData[tab].forEach(item => {
+                d.innerHTML += `<div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:24px; text-align:center; border:1px solid rgba(255,255,255,0.05);">
+                <img src="${item.i}" style="width:100%; height:220px; object-fit:cover; border-radius:18px; margin-bottom:20px;">
+                <h4>${item.n}</h4><p style="color:var(--cafe-gold); font-weight:800; margin-bottom:15px;">${item.p}</p>
+                <button class="btn btn-secondary" style="width:100%; font-size:0.8rem;" onclick="showToast('Added to Cart')">ADD TO ORDER</button></div>`;
+            });
+        }
+    }
+    setCafe('coffee');
+
+    let scene, camera, renderer, mesh;
+    function init3D() {
+        if(renderer) return;
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(10, 1), new THREE.MeshBasicMaterial({color: 0x4f46e5, wireframe: true}));
+        scene.add(mesh); camera.position.z = 25;
+        function anim() { requestAnimationFrame(anim); mesh.rotation.y += 0.01; mesh.rotation.x += 0.005; renderer.render(scene, camera); }
+        anim();
+    }
+    function genQR() {
+        QRCode.toCanvas(document.getElementById('qrCanvas'), "https://merhan.dev", { width: 220 }, (err) => {
+            if(!err) document.getElementById('qrWrap').style.display='block';
+        });
+    }
+  </script>
+</body>
+</html>
